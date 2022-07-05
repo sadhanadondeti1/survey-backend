@@ -64,3 +64,71 @@ exports.findAll = (req, res) => {
       });
     });
 };
+// Update a survey by the id in the request
+exports.update = (req, res) => {
+
+  const survey = {
+    name: req.query.name!=undefined ? req.query.name:null,
+    createdBy: req.query.createdBy!=undefined ? req.query.createdBy:null,
+    json:req.body!=undefined? req.body:null,  
+  };
+  const id = req.params.id;
+  Survey.update(survey, {
+    where: { id: id } 
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Survey was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Survey with id=${id}. Maybe Survey was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Survey with id=" + id
+      });
+    });
+};
+// Delete a Survey with the specified id in the request
+exports.delete = (req, res) => {
+  const id = req.params.id;
+  Survey.destroy({
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Survey was deleted successfully!"
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Survey with id=${id}. Maybe Survey was not found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Survey with id=" + id
+      });
+    });
+};
+// Delete all surveys from the database.
+exports.deleteAll = (req, res) => {
+  Survey.destroy({
+    where: {},
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Surveys were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all surveys."
+      });
+    });
+};
