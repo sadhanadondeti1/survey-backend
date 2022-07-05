@@ -9,5 +9,9 @@ module.exports = app => {
   router.get("/:id", survey.findOne);
    // Retrieve all Tutorials
    router.get("/", survey.findAll);
+   router.put("/:id", survey.update);
+   router.delete("/:id", survey.delete);
+  
+   router.delete("/", survey.deleteAll);
     app.use('/api/surveys+', router);
   };
