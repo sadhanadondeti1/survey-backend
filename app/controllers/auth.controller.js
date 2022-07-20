@@ -86,3 +86,85 @@ exports.signup = (req, res) => {
     });
 };
 
+// Delete a Tutorial with the specified id in the request
+exports.delete = (req, res) => {
+  const id = req.params.id;
+  User.destroy({
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "User was deleted successfully!"
+        });
+      } else {
+        res.send({
+          message: `Cannot delete User with id=${id}. Maybe User was not found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete User with id=" + id
+      });
+    });
+};
+// Delete all Tutorials from the database.
+exports.deleteAll = (req, res) => {
+  User.destroy({
+    where: {},
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Users were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all users."
+      });
+    });
+};
+// Retrieve all users from the database.
+exports.findAll = (req, res) => {
+  const username = req.query.username;
+  var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
+  User.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving users."
+      });
+    });
+};
+// Update a Tutorial by the id in the request
+exports.update = (req, res) => {
+
+ 
+  const id = req.params.id;
+  User.findByPk(id)
+  .then(user => {
+      console.log("user"+user);
+      if (req.body.roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: req.body.roles
+            }
+          }
+        }).then(roles => {
+          user.setRoles(roles).then(() => {
+            res.send({ message: "User updated successfully!" });
+          });
+        });
+      } 
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating user with id=" + id
+      });
+    });
+};

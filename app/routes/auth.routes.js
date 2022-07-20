@@ -18,6 +18,12 @@ module.exports = function(app) {
     ],
     controller.signup
   );
+  app.put("/api/auth/:id", controller.update);
 
   app.post("/api/auth/signin", controller.signin);
+  app.get("/api/auth/", controller.findAll);
+  app.delete("/api/auth/:id", controller.delete);
+ 
+  app.delete("/api/auth/", controller.deleteAll);
+
 };
