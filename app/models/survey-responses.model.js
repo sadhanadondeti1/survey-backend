@@ -5,6 +5,9 @@ module.exports = (sequelize, Sequelize) => {
       name: {
         type: Sequelize.STRING
       },
+      username: {
+        type: Sequelize.STRING
+      },
       json: {
         type: Sequelize.TEXT,
        // defaultValue: ‘[]’, //because we wanted an array of arrays
