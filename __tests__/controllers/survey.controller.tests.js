@@ -1,3 +1,4 @@
+/*
 const request = require('supertest');
 // mock out Sequelize
 const sequelize = jest.mock('sequelize');
@@ -63,3 +64,4 @@ describe('survey get all api', () => {
     });
   });
 });
+*/
